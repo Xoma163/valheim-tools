@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+{% block title %}Valheim Admin — Главная{% endblock %}
+
+{% block head %}
+    <style>
+        .status-card { margin-bottom: 24px; max-width: 760px; }
+        .control-card { margin-bottom: 24px; max-width: 760px; }
+        .server-status { display: grid; gap: 16px; }
+        .status-header { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+        .status-header-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+        .server-status h2 { margin: 0; }
+        .status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; font-weight: 700; }
+        .status-pill.online { background: rgba(126, 231, 135, 0.16); color: var(--ok); }
+        .status-pill.offline { background: rgba(255, 123, 114, 0.16); color: #ffb4ac; }
+        .status-dot { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+        .status-meta { display: grid; gap: 8px; color: var(--muted); }
+        .status-players { margin: 0; color: var(--muted); }
+        .server-control-panel { display: grid; gap: 14px; }
+        .server-control-panel h2 { margin-bottom: 0; }
+        .server-controls { display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px; }
+        .server-controls form { margin: 0; }
+        .server-controls-note { margin: 0; color: var(--muted); font-size: 14px; }
+        .modal-backdrop { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; padding: 24px; background: rgba(4, 8, 14, 0.68); backdrop-filter: blur(6px); }
+        .modal-backdrop[hidden] { display: none; }
+        .confirm-modal { width: min(440px, 100%); border: 1px solid var(--border); border-radius: 22px; background: var(--panel); color: var(--text); box-shadow: 0 24px 80px rgba(0, 0, 0, 0.42); overflow: hidden; animation: modal-pop .16s ease-out; }
+        .confirm-modal-header { display: flex; gap: 14px; align-items: flex-start; padding: 22px 22px 12px; }
+        .confirm-modal-icon { flex: 0 0 auto; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 14px; background: rgba(242, 201, 109, 0.16); color: var(--accent); font-size: 22px; }
+        .confirm-modal.danger .confirm-modal-icon { background: rgba(255, 123, 114, 0.16); color: #ffb4ac; }
+        .confirm-modal.start .confirm-modal-icon,
+        .confirm-modal.backup .confirm-modal-icon { background: rgba(126, 231, 135, 0.14); color: var(--ok); }
+        .confirm-modal-title { margin: 0 0 6px; font-size: 20px; }
+        .confirm-modal-message { margin: 0; color: var(--muted); line-height: 1.5; }
+        .confirm-modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 18px 22px 22px; }
+        .confirm-modal-actions button { min-width: 110px; }
+        .confirm-modal-actions .cancel-button { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+        @media (max-width: 520px) {
+            .confirm-modal-actions { flex-direction: column-reverse; }
+            .confirm-modal-actions button { width: 100%; }
+        }
+        @keyframes modal-pop {
+            from { opacity: 0; transform: translateY(8px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Главная страница</h1>
+        <p>Добро пожаловать на страницу нашей Valheim-сборки.</p>
+        <p>Если вы тут первый раз — зайдите в <a href="/guide">инструкции</a> и почитайте, как установить игру и подключить сборку.</p>
+        <p>Если что-то непонятно или возникла проблема — загляните в <a href="/faq">FAQ</a>.</p>
+        <p>На странице <a href="/mods">модов</a> доступен список модов сборки с поиском.</p>
+    </section>
+
+    <section class="panel status-card">
+        <div class="server-status">
+            <div class="status-header">
+                <h2>Статус сервера</h2>
+                <div class="status-header-actions">
+                    <a class="button secondary" href="/map">Карта</a>
+                    <div class="status-pill {% if server_status.online %}online{% else %}offline{% endif %}"><span class="status-dot"></span>{% if server_status.online %}Онлайн{% else %}Оффлайн{% endif %}</div>
+                </div>
+            </div>
+            <div class="status-meta">
+                <span><strong>Адрес:</strong> <button class="copy-value" type="button" data-copy-value="{{ server_status.host }}" title="Скопировать адрес сервера">{{ server_status.host }}</button></span>
+                {% if s.game_password %}<span><strong>Пароль:</strong> <button class="copy-value" type="button" data-copy-value="{{ s.game_password }}" title="Скопировать пароль">{{ s.game_password }}</button></span>{% endif %}
+                {% if server_status.online and server_status.version %}<span><strong>Версия:</strong> {{ server_status.version }}</span>{% endif %}
+                {% if server_status.online and server_status.latency_ms is not none %}<span><strong>Пинг:</strong> {{ server_status.latency_ms }} мс <small>(от панели до сервера)</small></span>{% endif %}
+            </div>
+            {% if server_status.online %}
+                <p class="status-players">Игроки онлайн: <strong>{{ server_status.players_online }}</strong> / {{ server_status.players_max }}{% if server_status.player_names %} — {{ server_status.player_names|join(', ') }}{% endif %}</p>
+            {% else %}
+                <p class="status-players">Сервер сейчас не отвечает. Возможно, он перезапускается или временно недоступен.</p>
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="panel control-card">
+        <div class="server-control-panel">
+            <h2>Управление сервером</h2>
+            <p class="server-controls-note">{% if s.mode == "demo" %}Демонстрационный режим: реальный сервер не затрагивается.{% else %}Команды отправляются в systemd и могут выполниться не мгновенно.{% endif %} Повторная команда доступна через 30 секунд.</p>
+            <div class="server-controls" aria-label="Управление Valheim-сервером">
+                {% if not server_status.online %}
+                <form method="post" action="/server/action" data-confirm-title="Запустить сервер?" data-confirm-message="Будет отправлена команда запуска Valheim-сервера. Запуск может занять некоторое время." data-confirm-label="Запустить" data-confirm-kind="start">
+                    <input type="hidden" name="csrf" value="{{ csrf }}">
+                    <input type="hidden" name="action" value="start">
+                    <button type="submit">Запустить</button>
+                </form>
+                {% else %}
+                <form method="post" action="/server/action" data-confirm-title="Остановить сервер?" data-confirm-message="Сервер будет выключен, а игроки потеряют подключение. Продолжаем?" data-confirm-label="Остановить" data-confirm-kind="danger">
+                    <input type="hidden" name="csrf" value="{{ csrf }}">
+                    <input type="hidden" name="action" value="stop">
+                    <button class="danger" type="submit">Остановить</button>
+                </form>
+                <form method="post" action="/server/action" data-confirm-title="Перезапустить сервер?" data-confirm-message="Игроков временно отключит, а серверу понадобится время на запуск." data-confirm-label="Перезапустить" data-confirm-kind="warning">
+                    <input type="hidden" name="csrf" value="{{ csrf }}">
+                    <input type="hidden" name="action" value="restart">
+                    <button type="submit">Рестарт</button>
+                </form>
+
+                {% endif %}
+            </div>
+        </div>
+    </section>
+
+    <div class="modal-backdrop" id="server-confirm-backdrop" hidden>
+        <div class="confirm-modal" id="server-confirm-modal" role="dialog" aria-modal="true" aria-labelledby="server-confirm-title" aria-describedby="server-confirm-message">
+            <div class="confirm-modal-header">
+                <div class="confirm-modal-icon" aria-hidden="true">⚠️</div>
+                <div>
+                    <h2 class="confirm-modal-title" id="server-confirm-title">Подтвердите действие</h2>
+                    <p class="confirm-modal-message" id="server-confirm-message">Вы уверены?</p>
+                </div>
+            </div>
+            <div class="confirm-modal-actions">
+                <button class="cancel-button" type="button" id="server-confirm-cancel">Отмена</button>
+                <button type="button" id="server-confirm-submit">Подтвердить</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {% include "copy_values.html" %}
+    <script>
+
+        const confirmBackdrop = document.getElementById('server-confirm-backdrop');
+        const confirmModal = document.getElementById('server-confirm-modal');
+        const confirmIcon = document.querySelector('.confirm-modal-icon');
+        const confirmTitle = document.getElementById('server-confirm-title');
+        const confirmMessage = document.getElementById('server-confirm-message');
+        const confirmCancel = document.getElementById('server-confirm-cancel');
+        const confirmSubmit = document.getElementById('server-confirm-submit');
+        let pendingForm = null;
+        let lastFocusedElement = null;
+
+        function closeConfirmModal() {
+            confirmBackdrop.hidden = true;
+            pendingForm = null;
+            confirmSubmit.classList.remove('danger');
+            confirmModal.classList.remove('danger', 'start', 'backup');
+            if (lastFocusedElement) lastFocusedElement.focus();
+        }
+
+        document.querySelectorAll('.server-controls form[data-confirm-title]').forEach((form) => {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                pendingForm = form;
+                lastFocusedElement = document.activeElement;
+
+                const confirmKind = form.dataset.confirmKind;
+                const isDanger = confirmKind === 'danger';
+                const isStart = confirmKind === 'start';
+                const isBackup = confirmKind === 'backup';
+                confirmTitle.textContent = form.dataset.confirmTitle || 'Подтвердите действие';
+                confirmMessage.textContent = form.dataset.confirmMessage || 'Вы уверены?';
+                confirmSubmit.textContent = form.dataset.confirmLabel || 'Подтвердить';
+                confirmIcon.textContent = isDanger ? '🛑' : (isStart ? '▶️' : (isBackup ? '💾' : '🔄'));
+                confirmSubmit.classList.toggle('danger', isDanger);
+                confirmModal.classList.toggle('danger', isDanger);
+                confirmModal.classList.toggle('start', isStart);
+                confirmModal.classList.toggle('backup', isBackup);
+
+                confirmBackdrop.hidden = false;
+                confirmCancel.focus();
+            });
+        });
+
+        confirmCancel.addEventListener('click', closeConfirmModal);
+        confirmBackdrop.addEventListener('click', (event) => {
+            if (event.target === confirmBackdrop) closeConfirmModal();
+        });
+        confirmSubmit.addEventListener('click', () => {
+            if (pendingForm) pendingForm.submit();
+        });
+        document.addEventListener('keydown', (event) => {
+            if (!confirmBackdrop.hidden && event.key === 'Escape') closeConfirmModal();
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="csrf-token" content="{{ csrf }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Valheim Admin{% endblock %}</title>
+    <script>
+        (() => {
+            const storageKey = "valheim-admin-theme";
+            const savedTheme = localStorage.getItem(storageKey);
+            const theme = savedTheme === "light" || savedTheme === "dark"
+                ? savedTheme
+                : (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: #0f1115;
+            --bg-to: #121722;
+            --panel: #171a21;
+            --panel-2: #1f2430;
+            --border: #2d3442;
+            --text: #eef2f8;
+            --muted: #9aa7bd;
+            --accent: #f2c96d;
+            --danger: #ff7b72;
+            --ok: #7ee787;
+        }
+        :root[data-theme="light"] {
+            color-scheme: light;
+            --bg: #f3f6fb;
+            --bg-to: #e8eef8;
+            --panel: #ffffff;
+            --panel-2: #eef3fb;
+            --border: #cfd8e6;
+            --text: #172033;
+            --muted: #5d6b80;
+            --accent: #ffc238;
+            --danger: #c6382f;
+            --ok: #217a3a;
+        }
+        * { box-sizing: border-box; }
+        html { min-height: 100%; background: var(--bg-to); }
+        body { min-height: 100vh; margin: 0; font-family: Inter, Segoe UI, Arial, sans-serif; background: linear-gradient(180deg, var(--bg), var(--bg-to)); background-attachment: fixed; color: var(--text); }
+        a { color: inherit; }
+        .container { width: min(1280px, calc(100% - 32px)); margin: 24px auto 48px; }
+        h1, h2, h3, p { margin-top: 0; }
+        .topbar, .hero, .panel, .asset-card, .stat-card { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 14px 40px rgba(0, 0, 0, 0.24); }
+        .topbar { position: sticky; top: 12px; z-index: 100; padding: 14px 18px; display: flex; gap: 14px; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+        .brand { font-weight: 700; letter-spacing: .02em; }
+        .nav { display: flex; gap: 10px; flex-wrap: wrap; }
+        .nav a { text-decoration: none; padding: 10px 14px; border-radius: 12px; color: var(--muted); border: 1px solid transparent; }
+        .nav a.active { color: #0a1420; background: var(--accent); }
+        .nav a:not(.active):hover { color: var(--text); border-color: var(--border); background: var(--panel-2); }
+        .theme-toggle { white-space: nowrap; background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+        .theme-toggle:hover { background: var(--panel); }
+        .hero { padding: 28px; margin-bottom: 24px; }
+        .hero p { color: var(--muted); max-width: 1100px; }
+        .grid { display: grid; gap: 24px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+        .stats { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-bottom: 24px; }
+        .stat-card { padding: 18px; }
+        .stat-card .value { font-size: 28px; font-weight: 700; }
+        .stat-card .label, .muted { color: var(--muted); }
+        .panel { padding: 22px; }
+        .notice { margin: 0 0 24px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border); }
+        .notice.ok { background: rgba(126, 231, 135, 0.12); color: var(--ok); }
+        .notice.error { background: rgba(255, 123, 114, 0.12); color: #ffb4ac; }
+        .button, button, .link-button { border: 0; border-radius: 12px; padding: 11px 16px; font-weight: 600; cursor: pointer; background: var(--accent); color: #0a1420; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: background-color .18s ease, color .18s ease, border-color .18s ease, transform .18s ease, box-shadow .18s ease; }
+        .button:hover, button:hover, .link-button:hover { background: #f6d98d; }
+        .button.secondary, .secondary-button { background: var(--panel-2); color: var(--text); border: 1px solid var(--border); }
+        button.danger { background: rgba(255, 123, 114, 0.16); color: #ffb4ac; border: 1px solid rgba(255, 123, 114, 0.3); }
+        button.danger:hover { background: rgba(255, 123, 114, 0.24); color: #ffd0ca; border-color: rgba(255, 123, 114, 0.45); }
+        :root[data-theme="light"] .button,
+        :root[data-theme="light"] button,
+        :root[data-theme="light"] .link-button { box-shadow: 0 1px 0 rgba(23, 32, 51, 0.06), 0 6px 16px rgba(255, 194, 56, 0.18); }
+        :root[data-theme="light"] .button.secondary,
+        :root[data-theme="light"] .secondary-button,
+        :root[data-theme="light"] .theme-toggle { box-shadow: 0 1px 0 rgba(23, 32, 51, 0.05); }
+        :root[data-theme="light"] button.danger { background: #ffe3e0; color: #9f241e; border-color: #ffb9b2; box-shadow: 0 1px 0 rgba(23, 32, 51, 0.04); }
+        :root[data-theme="light"] button.danger:hover { background: #ffd2cd; color: #7f1d18; border-color: #f08f86; }
+        label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 14px; }
+        input[type="text"], input[type="file"], textarea { width: 100%; border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; background: var(--panel-2); color: var(--text); margin-bottom: 14px; font: inherit; }
+        textarea { min-height: 140px; resize: vertical; }
+        .panel form small { display: block; margin-bottom: 14px; color: var(--muted); }
+        .empty { padding: 22px; border: 1px dashed var(--border); border-radius: 16px; color: var(--muted); }
+        .preformatted { white-space: pre-wrap; line-height: 1.6; }
+        .link-list { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 820px; }
+        th, td { padding: 12px 10px; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+        th { color: var(--muted); font-size: 13px; font-weight: 600; }
+        tr:last-child td { border-bottom: 0; }
+        .tag { display: inline-flex; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 4px 9px; color: var(--muted); font-size: 12px; white-space: nowrap; }
+        .inline-form { display: inline; }
+        @media (max-width: 760px) {
+            .topbar { align-items: flex-start; flex-direction: column; }
+        }
+    </style>
+    {% block head %}{% endblock %}
+</head>
+<body>
+<main class="container">
+    <header class="topbar">
+        <div class="brand">Valheim Admin</div>
+        <nav class="nav" aria-label="Основная навигация">
+            <a href="/" class="{% if current_page == 'dashboard' %}active{% endif %}">Главная</a>
+            <a href="/map" class="{% if current_page == 'map' %}active{% endif %}">Карта</a>
+            <a href="/guide" class="{% if current_page == 'guide' %}active{% endif %}">Инструкции</a>
+            <a href="/faq" class="{% if current_page == 'faq' %}active{% endif %}">FAQ</a>
+            <a href="/mods" class="{% if current_page == 'mods' %}active{% endif %}">Моды</a>
+        </nav>
+        <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Переключить тему">🌙 Тёмная</button>
+    </header>
+
+    {% if message %}<div class="notice ok">{{ message }}</div>{% endif %}
+    {% if error %}<div class="notice error">{{ error }}</div>{% endif %}
+
+    {% if s.mode == "demo" %}<div class="notice">DEMO: игровой сервер не подключён. Команды меняют только демонстрационное состояние.</div>{% endif %}
+    {% block content %}{% endblock %}
+</main>
+<script>
+    (() => {
+        const storageKey = "valheim-admin-theme";
+        const root = document.documentElement;
+        const button = document.getElementById("theme-toggle");
+
+        function preferredTheme() {
+            if (root.dataset.theme === "light" || root.dataset.theme === "dark") return root.dataset.theme;
+            const savedTheme = localStorage.getItem(storageKey);
+            if (savedTheme === "light" || savedTheme === "dark") return savedTheme;
+            return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+
+        function applyTheme(theme) {
+            root.dataset.theme = theme;
+            if (button) button.textContent = theme === "light" ? "☀️ Светлая" : "🌙 Тёмная";
+        }
+
+        applyTheme(preferredTheme());
+        if (button) {
+            button.addEventListener("click", () => {
+                const nextTheme = root.dataset.theme === "light" ? "dark" : "light";
+                localStorage.setItem(storageKey, nextTheme);
+                applyTheme(nextTheme);
+            });
+        }
+    })();
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

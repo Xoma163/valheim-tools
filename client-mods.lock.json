@@ -1,0 +1,91 @@
+[
+  {
+    "name": "denikson-BepInExPack_Valheim",
+    "version": "5.4.2351",
+    "sha256": "bce631497976a93977ceb08e166712e6c31d15244956f89f17df092a9b62e29f",
+    "dependencies": []
+  },
+  {
+    "name": "ValheimModding-Jotunn",
+    "version": "2.30.2",
+    "sha256": "8aae92da2be0eb6820cd4cf57e2f6c1d6ad0d738d4915966e7c3d7a94e9a9b0f",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2333"
+    ]
+  },
+  {
+    "name": "ValheimModding-JsonDotNET",
+    "version": "13.0.4",
+    "sha256": "a221c7be7163ab9739274b962fbd1f63abde65b1418839a62f02aca210868147",
+    "dependencies": []
+  },
+  {
+    "name": "Bagr-CrewStats",
+    "version": "1.1.0",
+    "sha256": "064a3451134e078b689b2ba2e44c5116f5434ca0c0e57ed7e0c9ed8bc1d52b49",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2350"
+    ]
+  },
+  {
+    "name": "RandyKnapp-EquipmentAndQuickSlots",
+    "version": "3.1.3",
+    "sha256": "bb5b51fb63842864b89a0408535adaa8290bde5605579ed69c17e0cdcd9721dd",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2201",
+      "ValheimModding-Jotunn-2.29.2"
+    ]
+  },
+  {
+    "name": "Riintouge-InputTweaks",
+    "version": "1.1.5",
+    "sha256": "008817dbe713362a70e5994279c45f0d79027ab5dcd259bd4474b1497365e983",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2350",
+      "ValheimModding-Jotunn-2.30.0"
+    ]
+  },
+  {
+    "name": "BentoG-MissingPieces",
+    "version": "2.3.2",
+    "sha256": "f6e612664339da24f4292b4655aef33eed6f10ec410abd90618b8bac9bea84e7",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2350",
+      "ValheimModding-Jotunn-2.30.2",
+      "ValheimModding-JsonDotNET-13.0.4"
+    ]
+  },
+  {
+    "name": "Advize-PlantEasily",
+    "version": "2.2.2",
+    "sha256": "415c6bab9abd622f05b44d3eb431e00a62602f3e455586fc310484bcf1770a3f",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2350"
+    ]
+  },
+  {
+    "name": "M2Valheim-SocialSystem",
+    "version": "1.0.4",
+    "sha256": "352aa5ee37d0f46dbf7dc873c3c2f5adc8c5cdcd4a955b0bd46c950758913c0c",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2351",
+      "ValheimModding-Jotunn-2.30.2"
+    ]
+  },
+  {
+    "name": "StonedParadise-Stay_Loaded",
+    "version": "1.0.0",
+    "sha256": "ecd20808ffbdd32999b0772a8104528a7348fe7387c8089bd6019320f737c621",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2351"
+    ]
+  },
+  {
+    "name": "Morda-StoreAndCraft",
+    "version": "1.4.0",
+    "sha256": "732cd9bdeca1e08ad1e72c57d5907a1cfd06ff0b7c44c1b3c14e5d0b78f16054",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2350"
+    ]
+  }
+]

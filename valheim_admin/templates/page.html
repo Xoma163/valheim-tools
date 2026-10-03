@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Valheim Admin — {{ 'Моды' if page == 'mods' else 'Карта' }}{% endblock %}
+{% block head %}
+{% if page == 'map' %}
+<style>
+    .map-frame-card { padding: 0; overflow: hidden; }
+    .map-frame-header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid var(--border); }
+    .map-frame-header h1 { margin: 0; font-size: 24px; }
+    .map-frame-header p { margin: 4px 0 0; color: var(--muted); }
+    .map-frame { display: block; width: 100%; height: min(78vh, 900px); min-height: 560px; border: 0; background: var(--panel-2); }
+    @media (max-width: 760px) {
+        .map-frame { min-height: 70vh; }
+    }
+</style>
+{% endif %}
+{% if page == 'mods' %}
+<style>
+/* Preserve the approved mods-page content styling. Shared shell comes from Minecraft Admin. */
+.hero h1 { font-size:clamp(28px,4vw,42px); margin-bottom:12px; }
+.table-wrap table { min-width:0; }
+.table-wrap th,.table-wrap td { padding:14px 10px; }
+</style>
+{% endif %}
+{% endblock %}
+{% block content %}
+{% if page == 'map' %}
+    {% if s.map_url %}
+    <section class="card map-frame-card">
+        <div class="map-frame-header">
+            <div>
+                <h1>Карта сервера</h1>
+                <p>Онлайн-карта мира. Можно двигать карту, приближать и смотреть постройки игроков.</p>
+            </div>
+            <a class="button" href="{{ s.map_url }}" target="_blank" rel="noopener noreferrer">Открыть отдельно</a>
+        </div>
+        <iframe class="map-frame" src="{{ s.map_url }}" title="Карта Valheim" loading="lazy" allowfullscreen></iframe>
+    </section>
+    {% else %}
+    <section class="hero"><h1>Карта мира</h1><p>Публичная карта сервера.</p></section>
+    <section class="panel"><h2>Карта ещё не подключена</h2><p class="muted">Она появится после запуска тестового мира и настройки ValheimWebMap.</p></section>
+    {% endif %}
+{% elif page == 'mods' %}
+    <section class="hero"><span class="tag">9 МОДОВ · ВЕРСИИ ЕЩЁ НЕ ЗАФИКСИРОВАНЫ</span><h1>Сборка штаба</h1><p>Финальный список выбранных модов. Зависимости и совместимость проверим перед развёртыванием; это пока не готовый профиль для импорта.</p></section>
+    <section class="panel"><label for="filter">Поиск мода</label><input type="text" id="filter" placeholder="Название или описание…"><div class="table-wrap"><table><thead><tr><th>Мод</th><th>Назначение</th></tr></thead><tbody>{% for author,name,description in mods %}<tr data-mod><td><a href="https://thunderstore.io/c/valheim/p/{{ author }}/{{ name }}/" target="_blank" rel="noopener noreferrer">{{ name.replace('_',' ') }}</a><div class="muted">{{ author }}</div></td><td>{{ description }}</td></tr>{% endfor %}</tbody></table></div></section>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('filter')?.addEventListener('input', event => {
+    for (const row of document.querySelectorAll('[data-mod]'))
+        row.hidden = !row.textContent.toLowerCase().includes(event.target.value.toLowerCase());
+});
+</script>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Valheim Admin — Инструкции{% endblock %}
+
+{% block head %}
+    <style>
+        .guide { display: grid; gap: 18px; }
+        .guide-step { padding: 22px; }
+        .guide-step h2 { display: flex; gap: 10px; align-items: baseline; }
+        .step-number { color: var(--accent); font-size: inherit; }
+        .guide-step p, .guide-step li { color: var(--muted); line-height: 1.65; }
+        .guide-step code, .guide-step pre { background: var(--panel-2); border-radius: 8px; color: var(--text); }
+        .guide-step code { padding: .15em .4em; }
+        .guide-step pre { padding: 14px; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+        .guide-links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+        .note { border-left: 3px solid var(--accent); padding-left: 14px; color: var(--muted); }
+        .copy-build-link.copied, .copy-server-address.copied { background: rgba(126, 231, 135, 0.18); color: var(--ok); box-shadow: 0 0 0 1px rgba(126, 231, 135, 0.24) inset; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <h1>Инструкции</h1>
+        <p>Установка сборки и подключение к серверу.</p>
+    </section>
+    <section class="guide">
+        <article class="panel guide-step">
+            <h2><span class="step-number">1.</span> Установить r2modman</h2>
+            <p><a href="https://r2modman.com/download-latest/" target="_blank" rel="noopener noreferrer">Скачайте r2modman</a> — файл <code>r2modman-<strong>Setup</strong>-3.*.*.exe</code> — и установите.</p>
+        </article>
+        <article class="panel guide-step">
+            <h2><span class="step-number">2.</span> Выбрать игру</h2>
+            <p>Запустите r2modman, выберите <strong>Valheim</strong> и платформу <strong>Steam</strong>.</p>
+        </article>
+        <article class="panel guide-step">
+            <h2><span class="step-number">3.</span> Импортировать сборку</h2>
+            <p>Нажмите <strong>Import / Update → From Code</strong> и вставьте код:</p>
+            <p>{% if s.profile_code %}<button class="copy-value" type="button" data-copy-value="{{ s.profile_code }}" title="Скопировать код сборки">{{ s.profile_code }}</button>{% else %}Код сборки уточните у администратора.{% endif %}</p>
+            <p>Далее <strong>Import → Import new profile</strong>. Название профиля любое, например <button class="copy-value" type="button" data-copy-value="SHTAB-SORTIR" title="Скопировать название профиля">SHTAB-SORTIR</button>.</p>
+        </article>
+        <article class="panel guide-step">
+            <h2><span class="step-number">4.</span> Запустить игру с модами</h2>
+            <p>Нажмите <strong>SELECT</strong> у своего профиля, затем <strong>Start modded</strong> слева сверху.</p>
+        </article>
+        <article class="panel guide-step">
+            <h2><span class="step-number">5.</span> Подключиться к серверу</h2>
+            <p>Настройте игру, создайте <strong>нового персонажа</strong>, нажмите <strong>Начать → Присоединиться</strong> и добавьте сервер:</p>
+            <p><strong>Адрес:</strong> <button class="copy-value" type="button" data-copy-value="{{ s.address }}" title="Скопировать адрес сервера">{{ s.address }}</button></p>
+            <p><strong>Пароль:</strong> {% if s.game_password %}<button class="copy-value" type="button" data-copy-value="{{ s.game_password }}" title="Скопировать пароль">{{ s.game_password }}</button>{% else %}уточните у AndrewSha.{% endif %}</p>
+        </article>
+        <article class="panel guide-step">
+            <h2><span class="step-number">6.</span> Настроить моды под себя</h2>
+            <p>Прочитайте <a href="/faq">FAQ</a>: там возможности модов, полезные клавиши и настройки.</p>
+        </article>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {% include "copy_values.html" %}
+{% endblock %}

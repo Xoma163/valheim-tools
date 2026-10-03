@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Valheim Admin — FAQ{% endblock %}
+
+{% block head %}
+    <style>
+        .faq-list { display: grid; gap: 14px; }
+        .faq-item { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .faq-item summary { cursor: pointer; padding: 18px 20px; font-weight: 700; color: var(--text); }
+        .faq-item summary:hover { background: var(--panel-2); }
+        .faq-answer { padding: 18px 20px; border-top: 1px solid var(--border); color: var(--muted); line-height: 1.65; }
+        .faq-answer p, .faq-answer ul { margin: 0; }
+        .faq-answer ul { padding-left: 1.2em; }
+        .faq-answer > * + * { margin-top: .8em; }
+        .faq-answer code { background: var(--panel-2); padding: .15em .4em; border-radius: 6px; color: var(--text); }
+        .faq-category { margin: 26px 0 10px; color: var(--accent); }
+        .faq-category:first-child { margin-top: 0; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <section class="hero">
+        <h1>FAQ</h1>
+        <p>О сервере, сохранениях, модах нашей сборки и полезных действиях на базе.</p>
+    </section>
+    <section class="faq-list">
+        <h2 class="faq-category">О сервере</h2>
+        <details class="faq-item">
+            <summary>Какой график работы сервера?</summary>
+            <div class="faq-answer"><p><strong>24/7</strong>, с короткими перерывами на обслуживание и обновления.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>Какие конфиги и основные параметры сервера?</summary>
+            <div class="faq-answer">
+                <p><strong>Настройки мира — дефолтные:</strong></p>
+                <ul>
+                    <li>Сложность боя — <strong>обычная (дефолт)</strong>.</li>
+                    <li>Количество добываемых ресурсов — <strong>×1 (дефолт)</strong>.</li>
+                    <li>Штраф за смерть — <strong>обычный (дефолт)</strong>.</li>
+                    <li>Частота рейдов — <strong>обычная (дефолт)</strong>.</li>
+                    <li>Порталы — <strong>стандартные правила и ограничения переноса предметов (дефолт)</strong>.</li>
+                    <li>Карта включена, враги не переведены в пассивный режим, строительство требует ресурсов — <strong>дефолт</strong>.</li>
+                    <li>Лимит — <strong>10 игроков одновременно (дефолт)</strong>.</li>
+                </ul>
+                <p>Подключение — <code>{{ s.address }}</code>, ПК / Steam, по паролю. Список модов — ниже.</p>
+                <p><strong>Настроено отдельно, не дефолт:</strong> сохранение мира каждые 15 минут; короткий интервал бэкапа — 1 час, длинный — 4 часа, хранение до 44 копий.</p>
+            </div>
+        </details>
+        <details class="faq-item">
+            <summary>Какое железо у сервера?</summary>
+            <div class="faq-answer"><ul><li>Процессор — <strong>Intel Core i5-12600</strong>.</li><li>Оперативная память — <strong>32 ГБ, 3600 МГц</strong>.</li><li>Накопитель — <strong>SSD 512 ГБ</strong>.</li></ul></div>
+        </details>
+        <details class="faq-item">
+            <summary>Мы случайно испортили мир — что делать?</summary>
+            <div class="faq-answer">
+                <p><strong>Позовите AndrewSha для отката.</strong> Укажите, что произошло и примерное время.</p>
+                <p>Используются встроенные резервные копии Valheim:</p>
+                <ul>
+                    <li>Короткий интервал — <strong>1 час</strong>.</li>
+                    <li>Длинный интервал — <strong>4 часа</strong>.</li>
+                    <li>До <strong>44 копий</strong> — примерно неделя истории при регулярной работе сервера.</li>
+                </ul>
+                <p>Автосохранение — каждые <strong>15 минут</strong>. Откатывается весь мир; персонажи в эти бэкапы не входят.</p>
+            </div>
+        </details>
+        <details class="faq-item">
+            <summary>Сколько будет жить сервер?</summary>
+            <div class="faq-answer"><p><strong>Минимум 1 месяц.</strong> Дальше — по онлайну и интересу игроков.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>Что будет после закрытия сервера?</summary>
+            <div class="faq-answer"><p>Бэкапы мира будут выложены для скачивания, чтобы желающие могли развернуть мир у себя и продолжить играть.</p></div>
+        </details>
+
+        <h2 class="faq-category">Совместная игра и помощь</h2>
+        <details class="faq-item">
+            <summary>Можно ли заходить старым персонажем и приносить ресурсы из других миров?</summary>
+            <div class="faq-answer"><p><strong>Нет.</strong> Начинаем новыми персонажами, ресурсы из других миров не переносим.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>Можно ли обновлять моды самостоятельно?</summary>
+            <div class="faq-answer"><p><strong>Нежелательно — пока нет единой позиции.</strong> Играем, пока играется. Если потребуется обновление, AndrewSha обновит моды на сервере и объявит об этом в Discord. Тогда обновляйте свои моды: со старыми версиями после обновления сервера может не пустить. В любом случае будет анонс.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>Как проходим боссов?</summary>
+            <div class="faq-answer"><p>Желательно <strong>всем вместе</strong>, чтобы прогресс мира был общим и все двигались примерно в одном темпе.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>Как сообщить о проблеме?</summary>
+            <div class="faq-answer"><p>Тегайте в Discord <strong>AndrewSha</strong> или <strong>Деда</strong>.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>Не могу подключиться — что проверить?</summary>
+            <div class="faq-answer"><ul><li>Игра запущена через <strong>r2modman → Start modded</strong>.</li><li>Версии общих модов совпадают с серверными.</li><li><strong>ValheimWebMap отключён на клиенте</strong> — он нужен только серверу.</li></ul><p>Если не помогло — тегайте в Discord <strong>AndrewSha</strong> или <strong>Деда</strong>.</p></div>
+        </details>
+
+        <h2 class="faq-category">Как быстро разложить вещи на базе</h2>
+        <details class="faq-item">
+            <summary>Можно ли сразу разложить вещи из инвентаря по сундукам?</summary>
+            <div class="faq-answer">
+                <p><strong>StoreAndCraft:</strong> нажми <code>.</code> рядом с сундуками — подходящие вещи разложатся по хранилищам в пределах радиуса действия.</p>
+                <p>С настройкой <strong>Chests only take items they already hold</strong> вещи отправляются только в сундуки с такими же предметами. Для пустого сундука сначала положи образец.</p>
+                <p>Чтобы не переносить вещи с хотбара, включи <strong>Dump skips the hotbar</strong> в разделе <strong>Only for me (this PC)</strong> меню <code>F10</code> и нажми <strong>Save</strong>. Избранные предметы мод тоже пропускает. Эта настройка относится к переносу самим модом, а не к ванильному складыванию удержанием <code>E</code>.</p>
+            </div>
+        </details>
+        <details class="faq-item">
+            <summary>Как поменять клавишу раскладывания вещей?</summary>
+            <div class="faq-answer">
+                <p><strong>F10 → StoreAndCraft → Dump / Middle-click → кнопка Period под подписью Dump.</strong> Нажми нужную клавишу, затем <strong>Save</strong>.</p>
+                <p><strong>Mouse2 / Click</strong> — перенос одной стопки под курсором в инвентаре, по нажатию колёсика.</p>
+                <p>Альтернативный способ: закрой игру, открой <strong>r2modman → Config editor → com.morda.storeandcraft.cfg → 4 - Keys</strong> и измени <code>DumpKey</code> (по умолчанию <code>Period</code>).</p>
+            </div>
+        </details>
+
+        <h2 class="faq-category">Какие моды у нас установлены</h2>
+        <details class="faq-item">
+            <summary>CrewStats — статистика игроков</summary>
+            <div class="faq-answer"><p>Автоматически собирает статистику сервера: убийства, добычу ресурсов, крафт, смерти и достижения.</p><p><code>F7</code> или кнопка с диаграммой рядом с инвентарём — открыть статистику. Доступны периоды: сегодня, последние 7 дней и всё время.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>EquipmentAndQuickSlots — слоты экипировки и быстрого доступа</summary>
+            <div class="faq-answer"><p>Добавляет отдельные ячейки экипировки и быстрые слоты. Работает автоматически.</p><p>Для быстрого доступа перетащи нужный предмет в быстрый слот. Клавиши и число слотов настраиваются в <strong>r2modman → Config editor → конфиг EquipmentAndQuickSlots</strong>.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>InputTweaks — управление предметами в инвентаре</summary>
+            <div class="faq-answer"><p>Управление предметами в стиле Minecraft, включено по умолчанию.</p><ul><li><code>Shift + ЛКМ</code> — перенос стопки между инвентарём и сундуком.</li><li><code>Ctrl + ЛКМ/ПКМ</code> — разделение стопки.</li><li>Перетаскивание с ЛКМ — распределить стопку по ячейкам; с ПКМ — по одному предмету.</li><li>Колесо над предметом — перенос между инвентарями.</li><li><code>Q</code> — выбросить один предмет под курсором, <code>Shift+Q</code> — стопку.</li></ul><p>Настройки — <strong>r2modman → Config editor → конфиг InputTweaks</strong>. <code>Q</code> пересекается с автобегом.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>MissingPieces — дополнительные строительные детали</summary>
+            <div class="faq-answer"><p>Добавляет узкие лестницы, треугольные полы, угловые элементы крыш, небольшие каменные плиты и другие строительные детали.</p><p>Возьми молот и открой меню строительства (<code>ПКМ</code>) — новые детали доступны там. Дополнительное включение не требуется.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>PlantEasily — удобная посадка и сбор урожая</summary>
+            <div class="faq-answer"><p>Помогает сажать растения ровными рядами, избегать неподходящих мест, массово собирать и пересаживать урожай.</p><ul><li><strong>Посадка сеткой:</strong> возьми культиватор и выбери растение. <code>Правый Ctrl + стрелки</code> меняет число рядов и столбцов, ЛКМ высаживает выбранную сетку при наличии семян и подходящей земли.</li><li><strong>Переключатели:</strong> с культиватором и выбранным растением <code>F8</code> включает/выключает функции мода, <code>F10</code> — привязку к сетке, <code>F6</code> — пересадку после сбора.</li><li><strong>Массовый сбор:</strong> <code>левый Shift + E</code> по созревшим растениям, если массовый сбор разрешён настройками. Для автоматической пересадки нужны семена.</li><li><strong>Настройки:</strong> при закрытой игре открой <strong>r2modman → Config editor → advize.PlantEasily.cfg</strong>. В разделе Harvesting настраивается сбор; <code>ReplantOnHarvest</code> отвечает за пересадку.</li></ul><p>Клиентский мод. <code>F10</code> пересекается с меню StoreAndCraft — переназначь одну из клавиш, если оба действия срабатывают вместе.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>SocialSystem — друзья и группы</summary>
+            <div class="faq-answer"><p>Показывает участников группы и их здоровье прямо на экране, а позиции — на карте. Также добавляет друзей, личные сообщения и групповой чат.</p><ul><li><code>O</code> — социальное окно: поиск по имени персонажа, сообщения и приглашения в группу.</li><li><code>P</code> — окно группы. Для общего списка на экране вступите в одну группу.</li><li>Видимость списка — <strong>r2modman → Config editor → конфиг SocialSystem → 2 - Interface → Party HUD</strong>.</li></ul></div>
+        </details>
+        <details class="faq-item">
+            <summary>Stay Loaded — сохранение заряда оружия</summary>
+            <div class="faq-answer"><p>Арбалет и другое оружие со стандартной перезарядкой сохраняют заряд при смене предмета. Работает автоматически: полностью заряди оружие перед переключением. Состояние заряда видно в подсказке предмета.</p><p>Не сохраняет незавершённую перезарядку и натяжение обычного лука.</p></div>
+        </details>
+        <details class="faq-item">
+            <summary>StoreAndCraft — удобная работа с сундуками и пополнение топлива</summary>
+            <div class="faq-answer">
+                <p>Мод добавлен для удобной жизни на базе:</p>
+                <ul>
+                    <li><strong>Разложить вещи по сундукам:</strong> рядом с хранилищем нажми <code>.</code>. Для одной стопки — наведи на неё курсор в инвентаре и нажми колёсико мыши.</li>
+                    <li><strong>Найти предмет или пополнить стопку:</strong> наведи на предмет в инвентаре и нажми <code>Y</code>, чтобы подсветить ближайший сундук с ним, или <code>Ctrl + нажатие колёсика</code>, чтобы добрать стопку из сундуков.</li>
+                    <li><strong>Крафтить и строить из сундуков:</strong> пользуйся верстаком или молотом как обычно — недостающие материалы мод возьмёт из ближайших доступных сундуков.</li>
+                    <li><strong>Пополнить факел или костёр:</strong> наведи на него и нажимай <code>E</code> для добавления подходящего топлива; мод позволяет брать его из ближайших сундуков.</li>
+                    <li><strong>Защитить вещи от переноса:</strong> <code>F</code> над предметом в инвентаре отмечает его как избранный. Для хотбара включи <strong>F10 → Only for me → Dump skips the hotbar → Save</strong>.</li>
+                    <li><strong>Исключить сундук:</strong> наведи на него, нажми <code>Alt+E</code> и включи <strong>Ignore</strong>.</li>
+                    <li><strong>Таблички хранения и кормушки:</strong> ищи добавленные детали в меню строительства молота. Установленная табличка настраивается через <code>E</code>, параметры кормушки — через <code>Alt+E</code>.</li>
+                    <li><strong>Сменить комплект брони:</strong> наведи на стойку с бронёй и нажми <code>E</code> — при включённой функции обмена мод поменяет её с надетой на тебе.</li>
+                </ul>
+                <p><strong>В Factorio не играем: автозаполнение производственных станций и автосбор их продукции не используем.</strong> Пополнение факелов и костров оставляем.</p>
+                <p>Настройки — <code>F10</code>. Клавиши и пропуск хотбара настраиваются локально, общие игровые параметры — на сервере.</p>
+            </div>
+        </details>
+        <details class="faq-item">
+            <summary>ValheimWebMap — карта мира на сайте (только сервер)</summary>
+            <div class="faq-answer"><p>Исследованные территории, постройки и видимые игроки на <a href="/map">карте сайта</a>. Кнопка <strong>Открыть отдельно</strong> разворачивает карту в новой вкладке.</p><p>Колесо — масштаб, перетаскивание — перемещение, <strong>3D</strong> — смена вида. <strong>Players</strong>, <strong>Markers</strong> и <strong>Layers</strong> — игроки, метки и слои.</p><p><strong>Устанавливать на клиент не нужно.</strong> Если WebMap есть в профиле r2modman, отключи его: он может мешать подключению к серверу.</p></div>
+        </details>
+    </section>
+{% endblock %}

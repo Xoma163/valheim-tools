@@ -1,0 +1,28 @@
+<style>
+    .copy-value { padding: .15em .4em; border: 0; border-radius: 6px; background: var(--panel-2); color: var(--text); font: inherit; cursor: pointer; box-shadow: none; overflow-wrap: anywhere; }
+    .copy-value:hover, .copy-value:focus-visible { background: var(--panel-2); color: var(--text); transform: none; box-shadow: 0 0 0 1px var(--border); }
+    .copy-value.copied { color: var(--ok); }
+</style>
+<script>
+    document.querySelectorAll('[data-copy-value]').forEach((button) => {
+        const originalText = button.textContent;
+        const originalTitle = button.title;
+        button.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(button.dataset.copyValue);
+            } catch (error) {
+                window.prompt('Скопируйте вручную:', button.dataset.copyValue);
+                return;
+            }
+            clearTimeout(button._copyTimer);
+            button.classList.add('copied');
+            button.textContent = 'Скопировано';
+            button.title = 'Скопировано';
+            button._copyTimer = setTimeout(() => {
+                button.classList.remove('copied');
+                button.textContent = originalText;
+                button.title = originalTitle;
+            }, 1200);
+        });
+    });
+</script>
