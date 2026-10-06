@@ -34,7 +34,10 @@ def test_pages_and_mods():
     for path in ['/', '/map', '/guide', '/faq', '/mods']:
         assert c.get(path).status_code == 200
     html = c.get('/mods').text
-    assert html.count('<tr data-mod>') == 9
+    assert html.count('<tr data-mod>') == 12
+    assert 'https://thunderstore.io/c/valheim/p/bdew/QuickConnect/' in html
+    assert 'NetworkPerformanceSystem' in html
+    assert 'Zen_ModLib' in html
     assert 'Lumberjacking' not in html
     assert 'test-password' not in c.get('/').text
 
@@ -100,7 +103,11 @@ def test_guide_and_game_password_visibility():
     assert f'data-copy-value="{password}"' in c.get('/').text
     assert 'navigator.clipboard.writeText(button.dataset.copyValue)' in html
     assert password not in repr(settings)
-    for path in ('/map', '/faq', '/mods', '/api/status'):
+    faq = c.get('/faq').text
+    assert f'data-copy-value="ШТАБ-СОРТИР:{settings.address}:{password}"' in faq
+    assert 'navigator.clipboard.writeText(button.dataset.copyValue)' in faq
+    assert 'ВАШ_ПАРОЛЬ' not in faq
+    for path in ('/map', '/mods', '/api/status'):
         assert password not in c.get(path).text
     assert 'example-game-password' not in client().get('/guide').text
 
@@ -117,7 +124,8 @@ def test_game_password_loaded_from_environment(monkeypatch):
 def test_faq_mods_and_dump_instructions():
     html = client().get('/faq').text
     for name in ('CrewStats', 'EquipmentAndQuickSlots', 'InputTweaks', 'MissingPieces',
-                 'PlantEasily', 'SocialSystem', 'Stay Loaded', 'StoreAndCraft', 'ValheimWebMap'):
+                 'PlantEasily', 'SocialSystem', 'Stay Loaded', 'StoreAndCraft', 'ValheimWebMap',
+                 'NetworkPerformanceSystem', 'Zen_ModLib', 'QuickConnect'):
         assert re.search(r'<summary>[^<]*' + re.escape(name), html)
     for text in ('Period', 'Mouse2', 'DumpKey', 'Dump skips the hotbar', 'Save',
                  'com.morda.storeandcraft.cfg', 'Устанавливать на клиент не нужно',
@@ -125,13 +133,34 @@ def test_faq_mods_and_dump_instructions():
                  'полностью заряди оружие', 'открой меню строительства',
                  'перетащи нужный предмет', 'Factorio'):
         assert text in html
-    assert html.count('<details class="faq-item">') == 22
+    assert html.count('<details class="faq-item"') == 25
+    assert 'QuickConnect 1.7.0 от bdew' in html
+    assert 'quick_connect_servers.cfg' in html
+    for text in ('Settings → Directories', 'Browse напротив Profile folder',
+                 'Reload From Disk', 'Awesome Server', 'ШТАБ-СОРТИР:game.example.invalid:2456:'):
+        assert text in html
+    assert 'Пароль хранится открытым текстом' in html
+    assert not re.search(r'<details\b[^>]*\sopen(?:\s|=|>)', html)
     assert 'Здесь будет ответ' not in html
+
+
+def test_mod_pages_without_update_notice():
+    c = client()
+    mods = c.get('/mods').text
+    for text in ('NetworkPerformanceSystem', 'CrewStats', 'StoreAndCraft', 'необязателен'):
+        assert text in mods
+    assert 'Что изменилось' not in mods
+    assert '12 МОДОВ И БИБЛИОТЕК' in mods
+    assert 'ВЕРСИИ ЕЩЁ НЕ ЗАФИКСИРОВАНЫ' not in mods
+    assert 'это пока не готовый профиль' not in mods
+    assert 'id="nps"' in c.get('/faq').text
+    assert 'update-title' not in c.get('/').text
+    assert 'NetworkPerformanceSystem' not in c.get('/guide').text
 
 
 def test_faq_server_information():
     html = client().get('/faq').text
-    for text in ('24/7', 'дефолт', '10 игроков', 'i5-12600', '32 ГБ', '3600 МГц',
+    for text in ('24/7', 'NetworkPerformanceSystem', '15 игроков', 'i5-12600', '32 ГБ', '3600 МГц',
                  'SSD 512 ГБ', 'AndrewSha', '1 час', '4 часа', '44', '15 минут',
                  'Минимум 1 месяц', 'Бэкапы мира будут выложены для скачивания'):
         assert text in html

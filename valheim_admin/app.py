@@ -26,11 +26,14 @@ MODS = [
     ('RandyKnapp', 'EquipmentAndQuickSlots', 'Отдельные слоты экипировки и быстрые слоты'),
     ('Riintouge', 'InputTweaks', 'Перенос на Shift, разделение на Ctrl и управление инвентарём'),
     ('BentoG', 'MissingPieces', 'Дополнительные строительные детали'),
+    ('MidnightMods', 'NetworkPerformanceSystem', 'Сетевая синхронизация и лимит 15 игроков; на клиенте необязателен'),
     ('Advize', 'PlantEasily', 'Удобная посадка растений'),
+    ('bdew', 'QuickConnect', 'Быстрое подключение к серверу с сохранённым паролем; только клиент'),
     ('M2Valheim', 'SocialSystem', 'Социальные функции и группы'),
     ('StonedParadise', 'Stay_Loaded', 'Сохранение заряда оружия при убирании'),
     ('Morda', 'StoreAndCraft', 'Хранение, крафт из сундуков и автоматизация'),
     ('f00d4tehg0dz', 'ValheimWebMap', 'Веб-карта мира'),
+    ('ZenDragon', 'Zen_ModLib', 'Библиотека ZenMods в клиентской сборке'),
 ]
 
 

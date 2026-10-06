@@ -17,4 +17,7 @@
 - [SocialSystem](https://thunderstore.io/c/valheim/p/M2Valheim/SocialSystem/)
 - [Stay Loaded](https://thunderstore.io/c/valheim/p/StonedParadise/Stay_Loaded/)
 - [StoreAndCraft](https://thunderstore.io/c/valheim/p/Morda/StoreAndCraft/)
+- [NetworkPerformanceSystem](https://thunderstore.io/c/valheim/p/MidnightMods/NetworkPerformanceSystem/) — на клиенте необязателен
+- [Zen_ModLib](https://thunderstore.io/c/valheim/p/ZenDragon/Zen_ModLib/)
+- [QuickConnect](https://thunderstore.io/c/valheim/p/bdew/QuickConnect/) — только клиент, быстрое подключение
 - [ValheimWebMap](https://thunderstore.io/c/valheim/p/f00d4tehg0dz/ValheimWebMap/) — только сервер, на клиент не устанавливать.

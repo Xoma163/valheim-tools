@@ -21,8 +21,8 @@
   },
   {
     "name": "Bagr-CrewStats",
-    "version": "1.1.0",
-    "sha256": "064a3451134e078b689b2ba2e44c5116f5434ca0c0e57ed7e0c9ed8bc1d52b49",
+    "version": "1.4.1",
+    "sha256": "a812ac657256d7587e9cb3be48d3e2bc5bde947deea83d39f8b6214d4555d620",
     "dependencies": [
       "denikson-BepInExPack_Valheim-5.4.2350"
     ]
@@ -38,8 +38,8 @@
   },
   {
     "name": "Riintouge-InputTweaks",
-    "version": "1.1.5",
-    "sha256": "008817dbe713362a70e5994279c45f0d79027ab5dcd259bd4474b1497365e983",
+    "version": "1.1.6",
+    "sha256": "96c26917f3d6dcba7ef58b648ece847f448de7d02d0e104c7417dd1c1241d97a",
     "dependencies": [
       "denikson-BepInExPack_Valheim-5.4.2350",
       "ValheimModding-Jotunn-2.30.0"
@@ -57,10 +57,10 @@
   },
   {
     "name": "Advize-PlantEasily",
-    "version": "2.2.2",
-    "sha256": "415c6bab9abd622f05b44d3eb431e00a62602f3e455586fc310484bcf1770a3f",
+    "version": "2.3.0",
+    "sha256": "1afe2daffc249ff4dc10dcf659f158d8546070822cb3229be780eee9edc287fe",
     "dependencies": [
-      "denikson-BepInExPack_Valheim-5.4.2350"
+      "denikson-BepInExPack_Valheim-5.4.2351"
     ]
   },
   {
@@ -82,10 +82,36 @@
   },
   {
     "name": "Morda-StoreAndCraft",
-    "version": "1.4.0",
-    "sha256": "732cd9bdeca1e08ad1e72c57d5907a1cfd06ff0b7c44c1b3c14e5d0b78f16054",
+    "version": "1.4.2",
+    "sha256": "c67ce5ddededed997cb69c569c74b8374d0a52110539e3ad86cfa63d7385faf9",
     "dependencies": [
       "denikson-BepInExPack_Valheim-5.4.2350"
+    ]
+  },
+  {
+    "name": "MidnightMods-NetworkPerformanceSystem",
+    "version": "1.15.0",
+    "sha256": "834f443aef55de903362fab80e78d94fee5529cad5926ab665bc722cee9f779e",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2350",
+      "ValheimModding-Jotunn-2.30.2"
+    ]
+  },
+  {
+    "name": "bdew-QuickConnect",
+    "version": "1.7.0",
+    "sha256": "e6b6df17ea76fd073cdab77beb61a0353cfff38ab5de93637ad3eaa9e56aa308",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2333"
+    ]
+  },
+  {
+    "name": "ZenDragon-Zen_ModLib",
+    "version": "1.14.20",
+    "sha256": "e510bb9b67d061612323f201d337967515d748f405a0c727c32cbb3e7fcf18da",
+    "dependencies": [
+      "denikson-BepInExPack_Valheim-5.4.2351",
+      "ValheimModding-Jotunn-2.30.0"
     ]
   }
 ]

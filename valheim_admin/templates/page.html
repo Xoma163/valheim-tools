@@ -40,7 +40,7 @@
     <section class="panel"><h2>Карта ещё не подключена</h2><p class="muted">Она появится после запуска тестового мира и настройки ValheimWebMap.</p></section>
     {% endif %}
 {% elif page == 'mods' %}
-    <section class="hero"><span class="tag">9 МОДОВ · ВЕРСИИ ЕЩЁ НЕ ЗАФИКСИРОВАНЫ</span><h1>Сборка штаба</h1><p>Финальный список выбранных модов. Зависимости и совместимость проверим перед развёртыванием; это пока не готовый профиль для импорта.</p></section>
+    <section class="hero"><span class="tag">{{ mods|length }} МОДОВ И БИБЛИОТЕК · ОБНОВЛЕНО 06.10.2026</span><h1>Сборка штаба</h1><p>Моды сервера и клиентской сборки. Инструкция подключения — <a href="/guide">здесь</a>, возможности и настройки — в <a href="/faq">FAQ</a>.</p></section>
     <section class="panel"><label for="filter">Поиск мода</label><input type="text" id="filter" placeholder="Название или описание…"><div class="table-wrap"><table><thead><tr><th>Мод</th><th>Назначение</th></tr></thead><tbody>{% for author,name,description in mods %}<tr data-mod><td><a href="https://thunderstore.io/c/valheim/p/{{ author }}/{{ name }}/" target="_blank" rel="noopener noreferrer">{{ name.replace('_',' ') }}</a><div class="muted">{{ author }}</div></td><td>{{ description }}</td></tr>{% endfor %}</tbody></table></div></section>
 {% endif %}
 {% endblock %}
