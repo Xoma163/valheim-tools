@@ -34,10 +34,30 @@ def test_pages_and_mods():
     for path in ['/', '/map', '/guide', '/faq', '/mods']:
         assert c.get(path).status_code == 200
     html = c.get('/mods').text
-    assert html.count('<tr data-mod>') == 12
-    assert 'https://thunderstore.io/c/valheim/p/bdew/QuickConnect/' in html
+    assert html.count('<tr data-mod>') == 14
+    from valheim_admin.app import MODS
+    assert html.index('>Назначение</th>') < html.index('>Версия</th>') < html.index('>CLIENT</th>')
+    for author, name, description, version, _, _ in MODS:
+        row = next(row.split('</tr>', 1)[0] for row in html.split('<tr data-mod>') if f'/{author}/{name}/' in row)
+        assert f'<td class="mod-version">{version}</td>' in row
+        assert version not in description
+    for name in ('BetterMinimap', 'Server_devcommands', 'Zen_ModLib'):
+        assert name in html
+    assert 'https://thunderstore.io/c/valheim/p/MagiCorp/RememberServerPassword/' in html
+    assert '1.2.4' in html
+    assert 'bdew/QuickConnect' not in html
     assert 'NetworkPerformanceSystem' in html
-    assert 'Zen_ModLib' in html
+    for name, client_side, server_side in (
+        ('NetworkPerformanceSystem', 'да', 'да'),
+        ('BetterMinimap', 'да', 'нет'),
+        ('ValheimWebMap', 'нет', 'да'),
+    ):
+        row = next(row for row in html.split('<tr data-mod>') if f'/{name}/' in row)
+        row = row.split('</tr>', 1)[0]
+        assert f'aria-label="CLIENT: {client_side}"' in row
+        assert f'aria-label="SERVER: {server_side}"' in row
+    assert '1.14.21' in html
+    assert 'ZenDragon' in html
     assert 'Lumberjacking' not in html
     assert 'test-password' not in c.get('/').text
 
@@ -94,6 +114,9 @@ def test_guide_and_game_password_visibility():
     c = TestClient(create_app(settings))
     html = c.get('/guide').text
     assert html.count('class="panel guide-step"') == 6
+    assert 'Что делать после подключения' in html
+    assert '«Виден другим игрокам»' in html
+    assert '<strong>M</strong>' in html
     for text in (settings.profile_code, 'SHTAB-SORTIR',
                  'Start modded', 'нового персонажа', settings.address, password):
         assert text in html
@@ -104,8 +127,7 @@ def test_guide_and_game_password_visibility():
     assert 'navigator.clipboard.writeText(button.dataset.copyValue)' in html
     assert password not in repr(settings)
     faq = c.get('/faq').text
-    assert f'data-copy-value="ШТАБ-СОРТИР:{settings.address}:{password}"' in faq
-    assert 'navigator.clipboard.writeText(button.dataset.copyValue)' in faq
+    assert password not in faq
     assert 'ВАШ_ПАРОЛЬ' not in faq
     for path in ('/map', '/mods', '/api/status'):
         assert password not in c.get(path).text
@@ -125,7 +147,8 @@ def test_faq_mods_and_dump_instructions():
     html = client().get('/faq').text
     for name in ('CrewStats', 'EquipmentAndQuickSlots', 'InputTweaks', 'MissingPieces',
                  'PlantEasily', 'SocialSystem', 'Stay Loaded', 'StoreAndCraft', 'ValheimWebMap',
-                 'NetworkPerformanceSystem', 'Zen_ModLib', 'QuickConnect'):
+                  'NetworkPerformanceSystem', 'Zen_ModLib', 'RememberServerPassword',
+                  'BetterMinimap', 'Server_devcommands'):
         assert re.search(r'<summary>[^<]*' + re.escape(name), html)
     for text in ('Period', 'Mouse2', 'DumpKey', 'Dump skips the hotbar', 'Save',
                  'com.morda.storeandcraft.cfg', 'Устанавливать на клиент не нужно',
@@ -133,13 +156,22 @@ def test_faq_mods_and_dump_instructions():
                  'полностью заряди оружие', 'открой меню строительства',
                  'перетащи нужный предмет', 'Factorio'):
         assert text in html
-    assert html.count('<details class="faq-item"') == 25
-    assert 'QuickConnect 1.7.0 от bdew' in html
-    assert 'quick_connect_servers.cfg' in html
-    for text in ('Settings → Directories', 'Browse напротив Profile folder',
-                 'Reload From Disk', 'Awesome Server', 'ШТАБ-СОРТИР:game.example.invalid:2456:'):
+    assert html.count('<details class="faq-item"') == 29
+    for text in ('id="hotkeys"', 'Z / V / B', 'F11', 'Левый Alt + R', 'F10 → Better Minimap'):
         assert text in html
-    assert 'Пароль хранится открытым текстом' in html
+    assert '1.14.20' not in html
+    assert '1.15.0' not in html
+    assert 'DOT / Period' in html
+    assert 'привязка к сетке по умолчанию' in html
+    assert 'Только для администраторов' not in html
+    assert 'Space / Левый Ctrl' not in html
+    assert 'RememberServerPassword 1.2.4 от MagiCorp' in html
+    assert 'quick_connect_servers.cfg' not in html
+    for text in ('После первого успешного подключения', 'Quick Connect',
+                 'последнего использованного персонажа', 'на сервер устанавливать не нужно',
+                 'удалите или отключите', 'персонаж не привязан к серверу'):
+        assert text in html
+    assert 'Reload From Disk' not in html
     assert not re.search(r'<details\b[^>]*\sopen(?:\s|=|>)', html)
     assert 'Здесь будет ответ' not in html
 
@@ -147,10 +179,10 @@ def test_faq_mods_and_dump_instructions():
 def test_mod_pages_without_update_notice():
     c = client()
     mods = c.get('/mods').text
-    for text in ('NetworkPerformanceSystem', 'CrewStats', 'StoreAndCraft', 'необязателен'):
+    for text in ('NetworkPerformanceSystem', 'CrewStats', 'StoreAndCraft', 'CLIENT', 'SERVER', 'обязателен'):
         assert text in mods
     assert 'Что изменилось' not in mods
-    assert '12 МОДОВ И БИБЛИОТЕК' in mods
+    assert '14 МОДОВ И БИБЛИОТЕК' in mods
     assert 'ВЕРСИИ ЕЩЁ НЕ ЗАФИКСИРОВАНЫ' not in mods
     assert 'это пока не готовый профиль' not in mods
     assert 'id="nps"' in c.get('/faq').text
@@ -162,7 +194,7 @@ def test_faq_server_information():
     html = client().get('/faq').text
     for text in ('24/7', 'NetworkPerformanceSystem', '15 игроков', 'i5-12600', '32 ГБ', '3600 МГц',
                  'SSD 512 ГБ', 'AndrewSha', '1 час', '4 часа', '44', '15 минут',
-                 'Минимум 1 месяц', 'Бэкапы мира будут выложены для скачивания'):
+                  'Минимум 1 месяц', '09.11.2026', 'Бэкапы мира будут выложены для скачивания'):
         assert text in html
     assert 'game.example.invalid:2456' in html
     for removed in ('Это характеристики машины', 'Также в сундуке должно быть место',
@@ -173,7 +205,7 @@ def test_faq_server_information():
 def test_faq_community_rules():
     html = client().get('/faq').text
     for text in ('Начинаем новыми персонажами', 'ресурсы из других миров не переносим',
-                 'Нежелательно — пока нет единой позиции', 'В любом случае будет анонс',
+                  'Самостоятельно моды не обновляем', 'обновление самого Valheim', 'только после этого анонса',
                  'всем вместе', 'Discord', 'Деда', 'ValheimWebMap отключён на клиенте'):
         assert text in html
 

@@ -19,6 +19,8 @@
 .hero h1 { font-size:clamp(28px,4vw,42px); margin-bottom:12px; }
 .table-wrap table { min-width:0; }
 .table-wrap th,.table-wrap td { padding:14px 10px; }
+.table-wrap .mod-side { text-align:center; white-space:nowrap; width:80px; }
+.table-wrap .mod-version { white-space:nowrap; }
 </style>
 {% endif %}
 {% endblock %}
@@ -40,8 +42,8 @@
     <section class="panel"><h2>Карта ещё не подключена</h2><p class="muted">Она появится после запуска тестового мира и настройки ValheimWebMap.</p></section>
     {% endif %}
 {% elif page == 'mods' %}
-    <section class="hero"><span class="tag">{{ mods|length }} МОДОВ И БИБЛИОТЕК · ОБНОВЛЕНО 06.10.2026</span><h1>Сборка штаба</h1><p>Моды сервера и клиентской сборки. Инструкция подключения — <a href="/guide">здесь</a>, возможности и настройки — в <a href="/faq">FAQ</a>.</p></section>
-    <section class="panel"><label for="filter">Поиск мода</label><input type="text" id="filter" placeholder="Название или описание…"><div class="table-wrap"><table><thead><tr><th>Мод</th><th>Назначение</th></tr></thead><tbody>{% for author,name,description in mods %}<tr data-mod><td><a href="https://thunderstore.io/c/valheim/p/{{ author }}/{{ name }}/" target="_blank" rel="noopener noreferrer">{{ name.replace('_',' ') }}</a><div class="muted">{{ author }}</div></td><td>{{ description }}</td></tr>{% endfor %}</tbody></table></div></section>
+    <section class="hero"><span class="tag">{{ mods|length }} МОДОВ И БИБЛИОТЕК · ОБНОВЛЕНО 07.10.2026</span><h1>Сборка штаба</h1><p>Моды сервера и клиентской сборки. Инструкция подключения — <a href="/guide">здесь</a>, возможности и настройки — в <a href="/faq">FAQ</a>.</p><p class="muted">✓ — установлен и включён на этой стороне в нашей сборке. CLIENT — у игрока, SERVER — на сервере.</p></section>
+    <section class="panel"><label for="filter">Поиск мода</label><input type="text" id="filter" placeholder="Название или описание…"><div class="table-wrap"><table><thead><tr><th>Мод</th><th>Назначение</th><th class="mod-version" scope="col">Версия</th><th class="mod-side" scope="col">CLIENT</th><th class="mod-side" scope="col">SERVER</th></tr></thead><tbody>{% for author,name,description,version,on_client,on_server in mods %}<tr data-mod><td><a href="https://thunderstore.io/c/valheim/p/{{ author }}/{{ name }}/" target="_blank" rel="noopener noreferrer">{{ name.replace('_',' ') }}</a><div class="muted">{{ author }}</div></td><td>{{ description }}</td><td class="mod-version">{{ version }}</td><td class="mod-side" aria-label="CLIENT: {{ 'да' if on_client else 'нет' }}">{{ '✓' if on_client else '—' }}</td><td class="mod-side" aria-label="SERVER: {{ 'да' if on_server else 'нет' }}">{{ '✓' if on_server else '—' }}</td></tr>{% endfor %}</tbody></table></div></section>
 {% endif %}
 {% endblock %}
 {% block scripts %}

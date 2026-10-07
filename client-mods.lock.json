@@ -90,28 +90,40 @@
   },
   {
     "name": "MidnightMods-NetworkPerformanceSystem",
-    "version": "1.15.0",
-    "sha256": "834f443aef55de903362fab80e78d94fee5529cad5926ab665bc722cee9f779e",
+    "version": "1.15.1",
+    "sha256": "765ddf733cb83db7f7b6b43b7b9de815324827d79460d043c9ee16a92621b30d",
     "dependencies": [
       "denikson-BepInExPack_Valheim-5.4.2350",
       "ValheimModding-Jotunn-2.30.2"
     ]
   },
   {
-    "name": "bdew-QuickConnect",
-    "version": "1.7.0",
-    "sha256": "e6b6df17ea76fd073cdab77beb61a0353cfff38ab5de93637ad3eaa9e56aa308",
+    "name": "MagiCorp-RememberServerPassword",
+    "version": "1.2.4",
+    "sha256": "77d0f2dd5bf087518fd349f25f7aadf57b9f08ff47a918fdb0e9d28ce4064b50",
     "dependencies": [
-      "denikson-BepInExPack_Valheim-5.4.2333"
+      "denikson-BepInExPack_Valheim-5.4.2350"
     ]
   },
   {
     "name": "ZenDragon-Zen_ModLib",
-    "version": "1.14.20",
-    "sha256": "e510bb9b67d061612323f201d337967515d748f405a0c727c32cbb3e7fcf18da",
+    "version": "1.14.21",
+    "sha256": "d6f412c42ed18939e832a60355963a403bd38a570db8c868ef7e137268c3a217",
     "dependencies": [
       "denikson-BepInExPack_Valheim-5.4.2351",
       "ValheimModding-Jotunn-2.30.0"
     ]
+  },
+  {
+    "name": "JereKuusela-Server_devcommands",
+    "version": "1.115.0",
+    "sha256": "b2752c18342bc9cabf4734e3480cd2cc4aa9faa8955ba503d4f7cefcfa3e4b33",
+    "dependencies": ["denikson-BepInExPack_Valheim-5.4.2351"]
+  },
+  {
+    "name": "AndrewSha-BetterMinimap",
+    "version": "1.0.1",
+    "sha256": "f069d3ae55b4b0f50d7a19de1f9142c39dc51a883a587ee64368f4bd59860b33",
+    "dependencies": ["denikson-BepInExPack_Valheim-5.4.2351"]
   }
 ]

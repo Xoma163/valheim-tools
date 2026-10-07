@@ -22,18 +22,20 @@ load_dotenv(ROOT.parent / '.env')
 log = logging.getLogger('valheim_admin')
 
 MODS = [
-    ('Bagr', 'CrewStats', 'Статистика участников сервера'),
-    ('RandyKnapp', 'EquipmentAndQuickSlots', 'Отдельные слоты экипировки и быстрые слоты'),
-    ('Riintouge', 'InputTweaks', 'Перенос на Shift, разделение на Ctrl и управление инвентарём'),
-    ('BentoG', 'MissingPieces', 'Дополнительные строительные детали'),
-    ('MidnightMods', 'NetworkPerformanceSystem', 'Сетевая синхронизация и лимит 15 игроков; на клиенте необязателен'),
-    ('Advize', 'PlantEasily', 'Удобная посадка растений'),
-    ('bdew', 'QuickConnect', 'Быстрое подключение к серверу с сохранённым паролем; только клиент'),
-    ('M2Valheim', 'SocialSystem', 'Социальные функции и группы'),
-    ('StonedParadise', 'Stay_Loaded', 'Сохранение заряда оружия при убирании'),
-    ('Morda', 'StoreAndCraft', 'Хранение, крафт из сундуков и автоматизация'),
-    ('f00d4tehg0dz', 'ValheimWebMap', 'Веб-карта мира'),
-    ('ZenDragon', 'Zen_ModLib', 'Библиотека ZenMods в клиентской сборке'),
+    ('Bagr', 'CrewStats', 'Статистика участников сервера', '1.4.1', True, True),
+    ('AndrewSha', 'BetterMinimap', 'Вращение мини-карты, зум, компас и освещение', '1.0.1', True, False),
+    ('JereKuusela', 'Server_devcommands', 'Инструменты администраторов; не предоставляет права администратора', '1.115.0', True, True),
+    ('ZenDragon', 'Zen_ModLib', 'Библиотека клиентских Zen-модов', '1.14.21', True, False),
+    ('RandyKnapp', 'EquipmentAndQuickSlots', 'Отдельные слоты экипировки и быстрые слоты', '3.1.3', True, False),
+    ('Riintouge', 'InputTweaks', 'Перенос на Shift, разделение на Ctrl и управление инвентарём', '1.1.6', True, False),
+    ('BentoG', 'MissingPieces', 'Дополнительные строительные детали', '2.3.2', True, True),
+    ('MidnightMods', 'NetworkPerformanceSystem', 'Сетевая синхронизация и лимит 15 игроков; обязателен на клиенте и сервере в нашей сборке', '1.15.1', True, True),
+    ('Advize', 'PlantEasily', 'Удобная посадка растений', '2.3.0', True, False),
+    ('MagiCorp', 'RememberServerPassword', 'Быстрое подключение, сохранение пароля и выбор последнего персонажа', '1.2.4', True, False),
+    ('M2Valheim', 'SocialSystem', 'Социальные функции и группы', '1.0.4', True, True),
+    ('StonedParadise', 'Stay_Loaded', 'Сохранение заряда оружия при убирании', '1.0.0', True, False),
+    ('Morda', 'StoreAndCraft', 'Хранение, крафт из сундуков и автоматизация', '1.4.2', True, True),
+    ('f00d4tehg0dz', 'ValheimWebMap', 'Веб-карта мира; в клиентском профиле выключен', '2.1.6', False, True),
 ]
 
 
